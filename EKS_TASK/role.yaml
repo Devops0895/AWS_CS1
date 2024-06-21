@@ -1,0 +1,27 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-permissions
+rules:
+- apiGroups: ["apps"]
+  resources: ["pods", "services", "namespaces", "serviceaccounts","deployments","jobs", "horizontalpodautoscalers","cronjobs", "*"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["pods", "deployments", "replicasets", "services", "namespaces", "serviceaccounts","jobs", "horizontalpodautoscalers","cronjobs", "*"]  # Include all resources
+  verbs: ["create", "get", "list", "watch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: node-clusterrole-binding
+subjects:
+- kind: User
+  name: system:node:ip-10-0-5-179.us-west-2.compute.internal # replace with required node user name
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: system:node:ip-10-0-5-100.us-west-2.compute.internal # replace with required node user name
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: node-permissions
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-java-springboot
+  labels:
+    app: sample-java-springboot
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: sample-java-springboot
+  template:
+    metadata:
+      labels:
+        app: sample-java-springboot
+    spec:
+      containers:
+      - name: sample-java-springboot
+        image: <ECR_URL>/image_repo_name:<version_tag>
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 500m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
